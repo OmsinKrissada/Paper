@@ -10,7 +10,7 @@ Also has a hover text on each mob category listing what entity types are
 in said category
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperCommand.java b/src/main/java/com/destroystokyo/paper/PaperCommand.java
-index f436ab35798c9b6e6cb2eb60d2c02cbf9b742e69..6c076287d030651396535a7fa37b973c880ec507 100644
+index 2ef4b4c2ff81d0fa33d4630593266066d8e6a6f3..34bc24403a83ae578d2fc3956b4883894c618747 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperCommand.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperCommand.java
 @@ -3,6 +3,7 @@ package com.destroystokyo.paper;
@@ -47,14 +47,7 @@ index f436ab35798c9b6e6cb2eb60d2c02cbf9b742e69..6c076287d030651396535a7fa37b973c
  import org.apache.commons.lang3.tuple.MutablePair;
  import org.apache.commons.lang3.tuple.Pair;
  import org.bukkit.Bukkit;
-@@ -49,17 +58,19 @@ import java.util.ArrayList;
- import java.util.Arrays;
- import java.util.Collection;
- import java.util.Collections;
-+import java.util.Comparator;
- import java.util.Deque;
- import java.util.Iterator;
- import java.util.List;
+@@ -55,11 +64,12 @@ import java.util.List;
  import java.util.Locale;
  import java.util.Map;
  import java.util.Set;
@@ -68,7 +61,7 @@ index f436ab35798c9b6e6cb2eb60d2c02cbf9b742e69..6c076287d030651396535a7fa37b973c
  
      public PaperCommand(String name) {
          super(name);
-@@ -92,6 +103,10 @@ public class PaperCommand extends Command {
+@@ -92,6 +102,10 @@ public class PaperCommand extends Command {
                      return getListMatchingLast(sender, args, "help", "chunks");
                  }
                  break;
@@ -79,7 +72,7 @@ index f436ab35798c9b6e6cb2eb60d2c02cbf9b742e69..6c076287d030651396535a7fa37b973c
              case "chunkinfo":
                  List<String> worldNames = new ArrayList<>();
                  worldNames.add("*");
-@@ -188,6 +203,12 @@ public class PaperCommand extends Command {
+@@ -188,6 +202,12 @@ public class PaperCommand extends Command {
              case "syncloadinfo":
                  this.doSyncLoadInfo(sender, args);
                  break;
@@ -92,7 +85,7 @@ index f436ab35798c9b6e6cb2eb60d2c02cbf9b742e69..6c076287d030651396535a7fa37b973c
              case "ver":
                  if (!testPermission(sender, "version")) break; // "ver" needs a special check because it's an alias. All other commands are checked up before the switch statement (because they are present in the SUBCOMMANDS set)
              case "version":
-@@ -246,6 +267,183 @@ public class PaperCommand extends Command {
+@@ -246,6 +266,183 @@ public class PaperCommand extends Command {
          }
      }
  
@@ -277,7 +270,7 @@ index f436ab35798c9b6e6cb2eb60d2c02cbf9b742e69..6c076287d030651396535a7fa37b973c
          List<org.bukkit.World> worlds;
          if (args.length < 2 || args[1].equals("*")) {
 diff --git a/src/main/java/net/minecraft/world/level/NaturalSpawner.java b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
-index 88145f04989c71a686aae1b486087ecdf55e268c..5f68858fad7825cb736aaa50342c1a2fff5f8f2c 100644
+index 403f50ef908f65c62d4aaa7e5328faa0a7654480..b59f1554b4ad26d362c41c00b7a864a72efbd602 100644
 --- a/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 +++ b/src/main/java/net/minecraft/world/level/NaturalSpawner.java
 @@ -144,28 +144,15 @@ public final class NaturalSpawner {
@@ -317,7 +310,7 @@ index 88145f04989c71a686aae1b486087ecdf55e268c..5f68858fad7825cb736aaa50342c1a2f
              }
  
              if (!spawnThisTick || limit == 0) {
-@@ -204,6 +191,24 @@ public final class NaturalSpawner {
+@@ -204,6 +191,23 @@ public final class NaturalSpawner {
          world.getProfiler().pop();
      }
  
@@ -334,7 +327,6 @@ index 88145f04989c71a686aae1b486087ecdf55e268c..5f68858fad7825cb736aaa50342c1a2f
 +    }
 +
 +    public static int globalLimitForCategory(final ServerLevel level, final MobCategory category, final int spawnableChunkCount) {
-+        if (!level.paperConfig.perPlayerMobSpawns) return limitForCategory(level, category);
 +        return limitForCategory(level, category) * spawnableChunkCount / NaturalSpawner.MAGIC_NUMBER;
 +    }
 +    // Paper end
